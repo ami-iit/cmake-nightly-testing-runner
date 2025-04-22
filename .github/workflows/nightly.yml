@@ -12,6 +12,15 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      dashboard_no_submit:
+        description: 'If ON, do not submit the test to CTest'
+        required: true
+        default: 'ON'
+        type: choice
+        options:
+          - ON
+          - OFF
 
 jobs:
   build:
@@ -24,6 +33,17 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+
+      # Set dashboard_no_submit on schedule or workflow_dispatch
+      - name: Set dashboard_no_submit for non-workflow_dispatch builds
+        if: github.event_name != 'workflow_dispatch'
+        run: |
+          echo "dashboard_no_submit=OFF" >> $GITHUB_ENV
+
+      - name: Set dashboard_no_submit for non-workflow_dispatch builds
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "dashboard_no_submit=${{ github.event.inputs.dashboard_no_submit }}" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: |
@@ -42,4 +62,4 @@ jobs:
           env
           which matlab
           ctest --version
-          ctest -S ${GITHUB_WORKSPACE}/Dashboards/Scripts/matlab_dashboard.cmake -V
+          ctest -S ${GITHUB_WORKSPACE}/Dashboards/Scripts/matlab_dashboard.cmake -Ddashboard_no_submit:BOOL=OFF -V
