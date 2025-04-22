@@ -55,7 +55,11 @@ jobs:
         uses: matlab-actions/setup-matlab@v1
         with:
           release: ${{ matrix.matlab_version }}
-        
+
+      - name: Install matlab-support to avoid conflicts between system libstdc++ and MATLAB's vendored libstdc++
+        run: |
+          sudo apt-get install matlab-support
+
       - name: Run Nightly Test
         run: |
           export GHA_MATLAB_VERSION=${{ matrix.matlab_version }}
