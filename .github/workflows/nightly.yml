@@ -19,8 +19,8 @@ on:
         default: 'ON'
         type: choice
         options:
-          - ON
-          - OFF
+          - 'ON'
+          - 'OFF'
 
 jobs:
   build:
@@ -40,7 +40,7 @@ jobs:
         run: |
           echo "dashboard_no_submit=OFF" >> $GITHUB_ENV
 
-      - name: Set dashboard_no_submit for non-workflow_dispatch builds
+      - name: Set dashboard_no_submit for workflow_dispatch builds
         if: github.event_name == 'workflow_dispatch'
         run: |
           echo "dashboard_no_submit=${{ github.event.inputs.dashboard_no_submit }}" >> $GITHUB_ENV
