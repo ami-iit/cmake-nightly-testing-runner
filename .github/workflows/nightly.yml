@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     name: 'Linux-GCC-Matlab-${{ matrix.matlab_version }}' 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         matlab_version: [R2020b, R2021a, R2021b, R2022a]
